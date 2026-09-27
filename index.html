@@ -257,30 +257,22 @@
       font-weight: 700;
     }
 
-    a.shot {
-      display: block;
+    .shot {
       margin: 0;
-      text-decoration: none;
-      color: inherit;
       background: var(--paper);
       border: 1px solid var(--line);
       border-radius: 16px;
       overflow: hidden;
       box-shadow: var(--shadow);
     }
-    a.shot:hover { border-color: #c5d0ea; }
     .shot img { display: block; width: 100%; height: auto; }
-    .shot .cap {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
+    .shot figcaption {
       padding: 12px 16px;
       border-top: 1px solid var(--line);
       background: #fbfcfe;
       color: var(--muted);
       font-size: 14px;
     }
-    .shot .cap span { color: var(--brand); font-weight: 700; white-space: nowrap; }
     .stack { display: grid; gap: 18px; }
 
     .close {
@@ -331,7 +323,6 @@
     @media (max-width: 560px) {
       .wrap { width: min(1120px, calc(100% - 28px)); }
       .toc { grid-template-columns: 1fr; }
-      .shot .cap { flex-direction: column; gap: 4px; }
       h1 { font-size: 36px; }
     }
     @media (prefers-reduced-motion: reduce) {
@@ -391,10 +382,10 @@
           </div>
           <p>Browse a website’s files and edit them in Monaco. Save writes to Dataverse. Bind Azure DevOps when you also want a lock and a commit, with a personal access token and no app registration. Standard and enhanced Power Pages data models both open here.</p>
         </div>
-        <a class="shot" href="shots/editor.png">
+        <figure class="shot">
           <img src="shots/editor.png" width="2551" height="1525" alt="Portex code editor showing the Web API Helper web template beside the file tree for the Mock Insurance site." />
-          <span class="cap">Web templates open beside the portal file tree. <span>View full size</span></span>
-        </a>
+          <figcaption>Web templates open beside the portal file tree.</figcaption>
+        </figure>
       </section>
 
       <section class="feature" id="security">
@@ -405,10 +396,10 @@
           </div>
           <p>Pick a web role and Portex draws its table permissions, parent relationships, and the tables they grant. Filter by contact, web role, or table and the map rebuilds around that slice. Access trace walks one contact through the same model.</p>
         </div>
-        <a class="shot" href="shots/security.png">
+        <figure class="shot">
           <img src="shots/security.png" width="2557" height="1524" alt="Security map for the Policyholder web role, linking table permissions to mock policy, claim, payment, and contact tables." />
-          <span class="cap">Policyholder, expanded from its web role to the tables those permissions grant. <span>View full size</span></span>
-        </a>
+          <figcaption>Policyholder, expanded from its web role to the tables those permissions grant.</figcaption>
+        </figure>
       </section>
 
       <section class="feature" id="queries">
@@ -419,10 +410,10 @@
           </div>
           <p>Execute FetchXML as a portal contact, so that contact’s web roles and table permissions apply. Rows come back under the query, with the raw payload and the server, plugin, and portal traces in the next tabs. Web API calls and Liquid renders use the same contact.</p>
         </div>
-        <a class="shot" href="shots/queries.png">
+        <figure class="shot">
           <img src="shots/queries.png" width="2557" height="1527" alt="FetchXML query against mock policies, executed as the User-Admin portal contact, with three result rows." />
-          <span class="cap">FetchXML for policies, executed as User-Admin. <span>View full size</span></span>
-        </a>
+          <figcaption>FetchXML for policies, executed as User-Admin.</figcaption>
+        </figure>
       </section>
 
       <section class="feature" id="viewer">
@@ -434,14 +425,14 @@
           <p>Choose a website and a portal profile. Portex opens that site in the contact’s session, including a private site, and can clear the portal cache from the toolbar. Traces turns the same page load into the Dataverse and Liquid work behind it.</p>
         </div>
         <div class="stack">
-          <a class="shot" href="shots/portal.png">
+          <figure class="shot">
             <img src="shots/portal.png" width="2557" height="1525" alt="Live Mock Insurance portal signed in as User Admin, with the home page open inside Portex." />
-            <span class="cap">The live site, opened as a portal profile. <span>View full size</span></span>
-          </a>
-          <a class="shot" href="shots/traces.png">
+            <figcaption>The live site, opened as a portal profile.</figcaption>
+          </figure>
+          <figure class="shot">
             <img src="shots/traces.png" width="2557" height="1522" alt="Portal traces for a page load, listing Dataverse RetrieveMultiple calls with duration and cache state." />
-            <span class="cap">Server trace for that page load: Dataverse operations, Liquid, and the slow calls. <span>View full size</span></span>
-          </a>
+            <figcaption>Server trace for that page load: Dataverse operations, Liquid, and the slow calls.</figcaption>
+          </figure>
         </div>
       </section>
 
