@@ -4,142 +4,463 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Portex — Power Pages IDE</title>
-  <meta name="description" content="Portex is a Power Pages developer IDE for XrmToolBox. Browse, edit, and commit portal files, preview a live website, audit security, and execute queries without leaving the app." />
-  <link rel="icon" type="image/png" href="icon.png" />
+  <meta name="description" content="Portex is a Power Pages IDE for XrmToolBox. Edit portal files, audit security, run queries as a contact, and preview the live site in one workspace." />
   <link rel="canonical" href="https://portex.mockit.co.in/" />
+  <meta name="theme-color" content="#3366CC" />
+  <meta property="og:title" content="Portex — Power Pages IDE" />
+  <meta property="og:description" content="Edit portal files, audit security, run queries as a contact, and preview the live site. An XrmToolBox plugin." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://portex.mockit.co.in/" />
+  <meta property="og:image" content="https://portex.mockit.co.in/shots/editor.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/png" href="icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --brand: #3366CC;
-      --brand-soft: #DCE5F5;
-      --ink: #18181B;
-      --muted: #52525B;
-      --line: #E4E4E7;
-      --bg: #FAFAFA;
+      --brand: #3366cc;
+      --brand-deep: #244e9e;
+      --cyan: #3ec6f0;
+      --ink: #16181d;
+      --muted: #5a6070;
+      --line: #e2e5ee;
+      --bg: #f4f6f9;
+      --paper: #ffffff;
+      --shadow: 0 18px 50px rgba(22, 36, 72, 0.12);
     }
+
     * { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     body {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      margin: 0;
       color: var(--ink);
       background: var(--bg);
+      font-family: "Source Sans 3", "Segoe UI", sans-serif;
+      font-size: 18px;
+      line-height: 1.5;
     }
-    main {
-      flex: 1;
+    img { max-width: 100%; height: auto; }
+    a { color: inherit; }
+    :focus-visible {
+      outline: 2px solid var(--brand);
+      outline-offset: 3px;
+    }
+
+    .skip {
+      position: absolute;
+      left: 12px;
+      top: -40px;
+      background: var(--ink);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 8px;
+      z-index: 20;
+    }
+    .skip:focus { top: 12px; }
+
+    .wrap {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(244, 246, 249, 0.88);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+    }
+    .bar {
       display: flex;
       align-items: center;
-      justify-content: center;
-      padding: 48px 24px 32px;
+      gap: 28px;
+      min-height: 68px;
     }
-    .card {
-      width: min(560px, 100%);
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 48px 40px 40px;
-      box-shadow: 0 10px 30px rgba(24, 24, 27, 0.06);
-      text-align: center;
-    }
-    .logo {
-      width: 72px;
-      height: 72px;
-      display: block;
-      margin: 0 auto 16px;
-    }
-    h1 {
-      margin: 0;
-      font-size: 32px;
-      font-weight: 650;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-family: "Schibsted Grotesk", "Segoe UI", sans-serif;
+      font-weight: 700;
       letter-spacing: -0.03em;
+      font-size: 18px;
     }
-    .tag {
-      margin: 6px 0 0;
-      color: var(--brand);
+    .brand img { width: 28px; height: 28px; display: block; }
+    .nav {
+      display: flex;
+      gap: 4px;
+      margin-left: auto;
+    }
+    .nav a {
+      text-decoration: none;
+      color: var(--muted);
       font-size: 15px;
       font-weight: 600;
+      padding: 8px 10px;
+      border-radius: 8px;
     }
-    p {
-      margin: 22px 0 0;
-      color: var(--muted);
-      font-size: 16px;
-      line-height: 1.55;
-    }
-    .features {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px;
-      margin: 24px 0 0;
-      padding: 0;
-      list-style: none;
-    }
-    .features li {
-      background: var(--brand-soft);
-      color: var(--brand);
-      border-radius: 999px;
-      padding: 6px 12px;
-      font-size: 13px;
-      font-weight: 600;
-    }
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 28px;
-    }
-    a.btn {
+    .nav a:hover { color: var(--ink); background: rgba(51, 102, 204, 0.08); }
+    .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       min-height: 40px;
       padding: 0 16px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
+      border-radius: 9px;
+      font-size: 15px;
+      font-weight: 700;
       text-decoration: none;
+      border: 1px solid transparent;
     }
-    a.primary { background: var(--brand); color: #fff; }
-    a.primary:hover { filter: brightness(1.06); }
-    a.ghost {
-      background: #fff;
+    .btn.primary { background: var(--brand); color: #fff; }
+    .btn.primary:hover { background: var(--brand-deep); }
+    .btn.ghost {
+      background: var(--paper);
       color: var(--ink);
-      border: 1px solid var(--line);
+      border-color: var(--line);
     }
-    a.ghost:hover { background: #F4F4F5; }
-    footer {
-      padding: 0 24px 28px;
-      text-align: center;
-      color: var(--muted);
+    .btn.ghost:hover { border-color: #c9ceda; background: #fafbfc; }
+    .bar .btn { margin-left: 8px; }
+
+    .hero {
+      position: relative;
+      padding: 72px 0 28px;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 460px;
+      background-image: radial-gradient(rgba(51, 102, 204, 0.22) 1.1px, transparent 1.1px);
+      background-size: 22px 22px;
+      mask-image: linear-gradient(to bottom, #000 20%, transparent 100%);
+      pointer-events: none;
+    }
+    .hero-inner { position: relative; max-width: 760px; }
+    .eyebrow {
+      margin: 0 0 14px;
+      color: var(--brand);
       font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
     }
-    footer a { color: var(--brand); text-decoration: none; }
+    h1 {
+      margin: 0;
+      font-family: "Schibsted Grotesk", "Segoe UI", sans-serif;
+      font-size: clamp(40px, 5.4vw, 64px);
+      line-height: 1.02;
+      letter-spacing: -0.045em;
+      font-weight: 700;
+    }
+    .lede {
+      margin: 18px 0 0;
+      max-width: 62ch;
+      color: var(--muted);
+      font-size: 20px;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .toc {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 48px auto 8px;
+      padding: 0;
+      list-style: none;
+    }
+    .toc a {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 16px 16px 14px;
+      text-decoration: none;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+    }
+    .toc .d {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.35;
+    }
+    .toc a:hover { border-color: #b9c7ee; box-shadow: 0 8px 24px rgba(51, 102, 204, 0.08); }
+    .toc .n {
+      font-family: "Schibsted Grotesk", sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--brand);
+    }
+    .toc strong {
+      font-family: "Schibsted Grotesk", sans-serif;
+      font-size: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    main { padding-bottom: 24px; }
+    .feature {
+      padding: 72px 0 8px;
+      scroll-margin-top: 84px;
+    }
+    .feature-head {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: 32px 48px;
+      align-items: end;
+      margin-bottom: 22px;
+    }
+    .kicker {
+      margin: 0 0 8px;
+      color: var(--brand);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    h2 {
+      margin: 0;
+      font-family: "Schibsted Grotesk", "Segoe UI", sans-serif;
+      font-size: clamp(28px, 3vw, 40px);
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+    }
+    .feature-head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+    }
+    .points {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 16px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .points li {
+      background: #e8eefb;
+      color: var(--brand-deep);
+      border-radius: 999px;
+      padding: 5px 11px;
+      font-size: 13.5px;
+      font-weight: 700;
+    }
+
+    a.shot {
+      display: block;
+      margin: 0;
+      text-decoration: none;
+      color: inherit;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    a.shot:hover { border-color: #c5d0ea; }
+    .shot img { display: block; width: 100%; height: auto; }
+    .shot .cap {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 16px;
+      border-top: 1px solid var(--line);
+      background: #fbfcfe;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .shot .cap span { color: var(--brand); font-weight: 700; white-space: nowrap; }
+    .stack { display: grid; gap: 18px; }
+
+    .close {
+      margin: 88px auto 0;
+      padding: 36px 36px;
+      background:
+        linear-gradient(135deg, rgba(62, 198, 240, 0.16), transparent 42%),
+        linear-gradient(180deg, #1d3f86, #244e9e);
+      color: #fff;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .close h2 { font-size: clamp(26px, 3vw, 34px); max-width: 16ch; }
+    .close p { margin: 10px 0 0; max-width: 46ch; color: rgba(255, 255, 255, 0.82); font-size: 16px; }
+    .close .btn.primary { background: #fff; color: var(--brand-deep); }
+    .close .btn.primary:hover { background: #eef3ff; }
+    .close .btn.ghost {
+      background: transparent;
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.35);
+    }
+    .close .btn.ghost:hover { background: rgba(255, 255, 255, 0.08); }
+    .close .actions { margin-top: 0; flex-shrink: 0; }
+
+    footer {
+      padding: 28px 0 36px;
+      color: var(--muted);
+      font-size: 14px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    footer a { color: var(--brand); font-weight: 700; text-decoration: none; }
     footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 860px) {
+      .nav { display: none; }
+      .toc { grid-template-columns: 1fr 1fr; }
+      .feature-head { grid-template-columns: 1fr; gap: 12px; }
+      .close { flex-direction: column; align-items: flex-start; padding: 28px 22px; }
+      .close .actions { margin-top: 8px; }
+      .hero { padding-top: 40px; }
+    }
+    @media (max-width: 560px) {
+      .wrap { width: min(1120px, calc(100% - 28px)); }
+      .toc { grid-template-columns: 1fr; }
+      .shot .cap { flex-direction: column; gap: 4px; }
+      h1 { font-size: 36px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
   </style>
 </head>
 <body>
-  <main>
-    <article class="card">
-      <img class="logo" src="logo.png" width="72" height="72" alt="Portex" />
-      <h1>Portex</h1>
-      <p class="tag">Power Pages IDE</p>
-      <p>Portex brings all your Power Pages development into a single workspace. Browse, edit and commit portal files, preview a live website, audit security, and execute queries — all without leaving the app.</p>
-      <ul class="features">
-        <li>Editor</li>
-        <li>Security graph</li>
-        <li>Actions</li>
-        <li>Portal viewer</li>
-      </ul>
-      <div class="actions">
-        <a class="btn primary" href="https://www.xrmtoolbox.com">Install from XrmToolBox</a>
-        <a class="btn ghost" href="https://github.com/RG2021/portex">Source on GitHub</a>
+  <a class="skip" href="#content">Skip to content</a>
+  <header id="top">
+    <div class="wrap bar">
+      <a class="brand" href="#top">
+        <img src="icon.png" width="28" height="28" alt="" />
+        Portex
+      </a>
+      <nav class="nav" aria-label="Sections">
+        <a href="#editor">Editor</a>
+        <a href="#security">Security</a>
+        <a href="#queries">Queries</a>
+        <a href="#viewer">Portal</a>
+      </nav>
+      <a class="btn primary" href="https://www.xrmtoolbox.com">Install</a>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <section class="hero">
+      <div class="hero-inner">
+        <p class="eyebrow">XrmToolBox plugin</p>
+        <h1>Power Pages development, in one workspace.</h1>
+        <p class="lede">Edit portal files, see how security connects, run queries as a contact, and open the live site. Dataverse stays the source of truth. Portex uses the connection you already have in XrmToolBox.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.xrmtoolbox.com">Install in XrmToolBox</a>
+          <a class="btn ghost" href="https://github.com/RG2021/portex">GitHub</a>
+        </div>
       </div>
-    </article>
-  </main>
-  <footer>
-    Developed by <a href="https://www.linkedin.com/in/rg2021">Rohan Goel</a>
-  </footer>
+      <ul class="toc">
+        <li><a href="#editor"><span class="n">01</span><strong>Code editor</strong><span class="d">Templates, snippets, files, and pages.</span></a></li>
+        <li><a href="#security"><span class="n">02</span><strong>Security analysis</strong><span class="d">Web roles and the tables they grant.</span></a></li>
+        <li><a href="#queries"><span class="n">03</span><strong>Query executor</strong><span class="d">FetchXML as a portal contact.</span></a></li>
+        <li><a href="#viewer"><span class="n">04</span><strong>Live portal viewer</strong><span class="d">The signed-in site, plus its traces.</span></a></li>
+      </ul>
+    </section>
+
+    <main id="content">
+      <section class="feature" id="editor">
+        <div class="feature-head">
+          <div>
+            <p class="kicker">01 — Code editor</p>
+            <h2>Portal files, in an editor that saves back to Dataverse.</h2>
+            <ul class="points">
+              <li>Web templates</li>
+              <li>Content snippets</li>
+              <li>Web files</li>
+              <li>Web pages</li>
+            </ul>
+          </div>
+          <p>Browse a website’s files and edit them in Monaco. Save writes to Dataverse. Bind Azure DevOps when you also want a lock and a commit, with a personal access token and no app registration. Standard and enhanced Power Pages data models both open here.</p>
+        </div>
+        <a class="shot" href="shots/editor.png">
+          <img src="shots/editor.png" width="1024" height="612" alt="Portex code editor showing the Web API Helper web template beside the file tree for the Mock Insurance site." />
+          <span class="cap">Web templates open beside the portal file tree. <span>View full size</span></span>
+        </a>
+      </section>
+
+      <section class="feature" id="security">
+        <div class="feature-head">
+          <div>
+            <p class="kicker">02 — Security analysis</p>
+            <h2>A map of who can reach which tables.</h2>
+          </div>
+          <p>Pick a web role and Portex draws its table permissions, parent relationships, and the tables they grant. Filter by contact, web role, or table and the map rebuilds around that slice. Access trace walks one contact through the same model.</p>
+        </div>
+        <a class="shot" href="shots/security.png">
+          <img src="shots/security.png" width="1024" height="610" alt="Security map for the Policyholder web role, linking table permissions to mock policy, claim, payment, and contact tables." />
+          <span class="cap">Policyholder, expanded from its web role to the tables those permissions grant. <span>View full size</span></span>
+        </a>
+      </section>
+
+      <section class="feature" id="queries">
+        <div class="feature-head">
+          <div>
+            <p class="kicker">03 — Query executor</p>
+            <h2>Run the query the way the portal would.</h2>
+          </div>
+          <p>Execute FetchXML as a portal contact, so that contact’s web roles and table permissions apply. Rows come back under the query, with the raw payload and the server, plugin, and portal traces in the next tabs. Web API calls and Liquid renders use the same contact.</p>
+        </div>
+        <a class="shot" href="shots/queries.png">
+          <img src="shots/queries.png" width="1024" height="611" alt="FetchXML query against mock policies, executed as the User-Admin portal contact, with three result rows." />
+          <span class="cap">FetchXML for policies, executed as User-Admin. <span>View full size</span></span>
+        </a>
+      </section>
+
+      <section class="feature" id="viewer">
+        <div class="feature-head">
+          <div>
+            <p class="kicker">04 — Live portal viewer</p>
+            <h2>The real site, already signed in.</h2>
+          </div>
+          <p>Choose a website and a portal profile. Portex opens that site in the contact’s session, including a private site, and can clear the portal cache from the toolbar. Traces turns the same page load into the Dataverse and Liquid work behind it.</p>
+        </div>
+        <div class="stack">
+          <a class="shot" href="shots/portal.png">
+            <img src="shots/portal.png" width="1024" height="610" alt="Live Mock Insurance portal signed in as User Admin, with the home page open inside Portex." />
+            <span class="cap">The live site, opened as a portal profile. <span>View full size</span></span>
+          </a>
+          <a class="shot" href="shots/traces.png">
+            <img src="shots/traces.png" width="1024" height="609" alt="Portal traces for a page load, listing Dataverse RetrieveMultiple calls with duration and cache state." />
+            <span class="cap">Server trace for that page load: Dataverse operations, Liquid, and the slow calls. <span>View full size</span></span>
+          </a>
+        </div>
+      </section>
+
+      <section class="close">
+        <div>
+          <h2>Install it where you already work.</h2>
+          <p>Free to download and use, including at work. Open the Tool Library in XrmToolBox and install Portex. It takes the Dataverse connection that is already open.</p>
+        </div>
+        <div class="actions">
+          <a class="btn primary" href="https://www.xrmtoolbox.com">Get Portex</a>
+          <a class="btn ghost" href="https://github.com/RG2021/portex">GitHub</a>
+        </div>
+      </section>
+
+      <footer>
+        <div>Developed by <a href="https://www.linkedin.com/in/rg2021">Rohan Goel</a></div>
+        <div><a href="https://portex.mockit.co.in/">portex.mockit.co.in</a></div>
+      </footer>
+    </main>
+  </div>
 </body>
 </html>

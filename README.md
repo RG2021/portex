@@ -1,6 +1,12 @@
 # Portex
 
-Portex is a Power Pages developer IDE for XrmToolBox. Browse, edit, and commit portal files, preview a live website, audit security, and execute queries without leaving the app.
+Power Pages IDE for [XrmToolBox](https://www.xrmtoolbox.com). One workspace to edit portal files, audit security, run queries as a contact, and preview the live site.
 
-- Site: https://portex.mockit.co.in
-- Tool Library icon: [icon.png](icon.png)
+**Site:** https://portex.mockit.co.in
+
+- Code editor
+- Security analysis
+- Query executor
+- Live portal viewer
+
+Tool Library icon: [icon.png](icon.png)
